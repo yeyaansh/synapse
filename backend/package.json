@@ -1,0 +1,34 @@
+{
+  "name": "server.js",
+  "version": "1.0.0",
+  "description": "backend of synapse website",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yeyaansh/synapse-backend.git"
+  },
+  "author": "Yeyaansh",
+  "contributors": [
+    {
+      "name": "Amisha"
+    }
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yeyaansh/synapse-backend/issues"
+  },
+  "homepage": "https://github.com/yeyaansh/synapse-backend#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0"
+  }
+}
