@@ -10,7 +10,7 @@ const userAuthMiddleware = async (req, res, next) => {
       throw new Error("Unauthenticated User!");
     }
 
-    const userExist = await user.findById(isVerified._id);
+    const userExist = await user.findById(validToken._id);
 
     if (!userExist) {
       throw new Error("Unauthenticated User!");
