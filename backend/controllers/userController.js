@@ -25,6 +25,11 @@ const pathChooser = async(req,res)=>{
 }
 
 
-export {getUserProfile,pathChooser, resultAfterEvaluation,verifyCredentials,
+const userDashboard = async(req,res)=>{
+
+}
+
+
+export {getUserProfile,pathChooser, resultAfterEvaluation,verifyCredentials,userDashboard,
     // onboardingUserAnswer,onboardingQuestion
 };

@@ -31,12 +31,12 @@ import { loginGlobal } from "../../redux/slice1";
 import { useEffect } from "react";
 
 export default function LoginPage({ className, ...props }) {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
+  // const { isAuthenticated } = useSelector((state) => state.auth);
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isAuthenticated) navigate("/");
-  }, [isAuthenticated]);
+  // useEffect(() => {
+  //   if (isAuthenticated) navigate("/");
+  // }, [isAuthenticated]);
 
   const dispatch = useDispatch();
   // 1. Define your Zod validation schema for the login form
@@ -66,7 +66,7 @@ export default function LoginPage({ className, ...props }) {
 
     // Here you would typically send data to your backend for authentication
     // Example: const user = await yourAuthService.login(values);
-    dispatch(loginGlobal(values));
+    dispatch(loginGlobal(values)).then(navigate("/dashboard/home"))
 
     toast.success("Login Successful!", {
       description: `Welcome back!`,
@@ -76,7 +76,7 @@ export default function LoginPage({ className, ...props }) {
   return (
     // Outer container for responsiveness and centering
     <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
-      <Toaster></Toaster>
+      {/* <Toaster></Toaster> */}
       <div className={cn("w-full max-w-md", className)} {...props}>
         <Card className="shadow-lg">
           <CardHeader className="text-center space-y-2">

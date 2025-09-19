@@ -4,6 +4,7 @@ import {
   pathChooser,
   resultAfterEvaluation,
   verifyCredentials,
+  userDashboard,
   // onboardingUserAnswer,onboardingQuestion
 } from "../../controllers/userController.js";
 import userAuthMiddleware from "../../middlewares/userMiddleware/index.js";
@@ -15,5 +16,6 @@ userRoutes.get("/:id", userAuthMiddleware, verifyCredentials);
 // userRoutes.post("/onboardingUserAnswer/:questionNumber",userAuthMiddleware,onboardingUserAnswer);
 userRoutes.get("/result", userAuthMiddleware, resultAfterEvaluation);
 userRoutes.post("/profession/:professionId", userAuthMiddleware, pathChooser);
+userRoutes.get("dashboard",userAuthMiddleware,userDashboard)
 
 export default userRoutes;

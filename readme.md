@@ -1,3 +1,1 @@
-need to build signup and signin page and use redux for state management
--- build signup and signin page
-need to add redux for state management
+need to add audit page for getting users personal data to suggest the best recommendation for the user..

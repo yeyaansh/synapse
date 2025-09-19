@@ -10,20 +10,35 @@ import OnboardingPage from "./pages/onboarding";
 import { useDispatch, useSelector } from "react-redux";
 import { authCheckGlobal } from "./redux/slice1";
 import { useEffect } from "react";
+import LoadingSpinner from "./utils/spinner";
+import UserDashboardLayout from "./layout/userDashboardLayout";
+import UserDashboard from "./pages/dashboard/userDashboard";
 
 function App() {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(authCheckGlobal());
   }, [dispatch]);
+
+  if (isLoading) return <LoadingSpinner />;
+
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage></HomePage>}></Route>
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? (
+                <Navigate to={"/dashboard/home"}></Navigate>
+              ) : (
+                <HomePage></HomePage>
+              )
+            }
+          ></Route>
           <Route path="/auth" element={<AuthLayout></AuthLayout>}>
             <Route
               index
@@ -31,9 +46,24 @@ function App() {
             ></Route>
             <Route
               path="register"
-              element={<RegisterPage></RegisterPage>}
+              element={
+                isAuthenticated ? (
+                  <Navigate to={"/"}></Navigate>
+                ) : (
+                  <RegisterPage></RegisterPage>
+                )
+              }
             ></Route>
-            <Route path="login" element={<LoginPage></LoginPage>}></Route>
+            <Route
+              path="login"
+              element={
+                isAuthenticated ? (
+                  <Navigate to={"/"}></Navigate>
+                ) : (
+                  <LoginPage></LoginPage>
+                )
+              }
+            ></Route>
           </Route>
 
           <Route path="/audit" element={<OnboardingLayout></OnboardingLayout>}>
@@ -44,6 +74,23 @@ function App() {
                   <OnboardingPage></OnboardingPage>
                 ) : (
                   <RegisterPage></RegisterPage>
+                )
+              }
+            ></Route>
+          </Route>
+
+          <Route
+            path="/dashboard"
+            element={<UserDashboardLayout></UserDashboardLayout>}
+          >
+            <Route index element={<Navigate to={"home"}></Navigate>}></Route>
+            <Route
+              path="home"
+              element={
+                isAuthenticated ? (
+                  <UserDashboard />
+                ) : (
+                  <Navigate to={"/auth/register"}></Navigate>
                 )
               }
             ></Route>

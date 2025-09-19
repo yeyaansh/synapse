@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
 const registerController = async (req, res) => {
   try {
     console.log("server side body mein ye aaya hai...");
-    
-    console.log(req.body)
+
+    console.log(req.body);
     const { full_name, gender, email_id } = req.body;
 
     if (!full_name || !gender || !email_id || !req.body.password) {
@@ -15,11 +15,14 @@ const registerController = async (req, res) => {
 
     const userExist = await user.findOne({ email_id });
     if (userExist) {
-      return res.status(200).send("User Already Exist...");
+      return res.json({
+        success: false,
+        message: "User Already Exist...",
+      });
     }
 
     // req.body.password = await bcrypt.hash(req.body.password, 12);
-    req.body.password = await bcrypt.hash(req.body.password,12);
+    req.body.password = await bcrypt.hash(req.body.password, 12);
     const userRegistration = {
       full_name,
       gender,
@@ -45,6 +48,7 @@ const registerController = async (req, res) => {
 
     res.status(200).json({
       user: reply,
+      success: true,
       message: "account created successfully!",
     });
   } catch (err) {
@@ -73,7 +77,11 @@ const loginController = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { _id: isEmail._id, full_name:isEmail.full_name, email_id:isEmail.email_id },
+      {
+        _id: isEmail._id,
+        full_name: isEmail.full_name,
+        email_id: isEmail.email_id,
+      },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1h" }
     );
@@ -88,6 +96,7 @@ const loginController = async (req, res) => {
     };
     res.status(200).json({
       user: reply,
+      success: true,
       message: "logged in successfully!",
     });
   } catch (err) {

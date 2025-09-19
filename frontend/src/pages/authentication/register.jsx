@@ -35,12 +35,12 @@ import { registerGlobal } from "../../redux/slice1";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 export default function RegisterPage({ className, ...props }) {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
+  // const { isAuthenticated } = useSelector((state) => state.auth);
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isAuthenticated) navigate("/");
-  }, [isAuthenticated]);
+  // useEffect(() => {
+  //   if (isAuthenticated) navigate("/");
+  // }, [isAuthenticated]);
 
   const dispatch = useDispatch();
 
@@ -89,7 +89,7 @@ export default function RegisterPage({ className, ...props }) {
   return (
     // Outer container for responsiveness and centering
     <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
-      <Toaster></Toaster>
+      {/* <Toaster></Toaster> */}
       <div className={cn("w-full max-w-md", className)} {...props}>
         <Card className="shadow-lg">
           <CardHeader className="text-center space-y-2">
