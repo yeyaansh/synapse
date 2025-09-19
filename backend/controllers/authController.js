@@ -4,9 +4,12 @@ import jwt from "jsonwebtoken";
 
 const registerController = async (req, res) => {
   try {
-    const { full_name, email_id } = req.body;
+    console.log("server side body mein ye aaya hai...");
+    
+    console.log(req.body)
+    const { full_name, gender, email_id } = req.body;
 
-    if (!full_name || !email_id || !req.body.password) {
+    if (!full_name || !gender || !email_id || !req.body.password) {
       throw new Error("Please enter the credentials");
     }
 
@@ -15,9 +18,11 @@ const registerController = async (req, res) => {
       return res.status(200).send("User Already Exist...");
     }
 
-    req.body.password = await bcrypt.hash(req.body.password, 12);
+    // req.body.password = await bcrypt.hash(req.body.password, 12);
+    req.body.password = await bcrypt.hash(req.body.password,12);
     const userRegistration = {
       full_name,
+      gender,
       email_id,
       password: req.body.password,
     };
@@ -31,11 +36,16 @@ const registerController = async (req, res) => {
     );
 
     // res.cookie('token',token,{maxAge:1000*60*60, httpOnly:true, path:'/'});
-
-    res.status(500).send({
+    res.cookie("token", token, { maxAge: 1000 * 60 * 60 });
+    const reply = {
       full_name: userData.full_name,
       email_id: userData.email_id,
       password: userData.password,
+    };
+
+    res.status(200).json({
+      user: reply,
+      message: "account created successfully!",
     });
   } catch (err) {
     console.log(err);
@@ -63,17 +73,22 @@ const loginController = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { _id: userData._id, full_name, email_id },
+      { _id: isEmail._id, full_name:isEmail.full_name, email_id:isEmail.email_id },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1h" }
     );
 
     // res.cookie('token',token,{maxAge:1000*60*60, httpOnly:true, path:'/'});
+    res.cookie("token", token, { maxAge: 1000 * 60 * 60 });
 
-    res.status(200).send({
+    const reply = {
       full_name: isEmail.full_name,
       email_id: isEmail.email_id,
       password: isEmail.password,
+    };
+    res.status(200).json({
+      user: reply,
+      message: "logged in successfully!",
     });
   } catch (err) {
     console.log(err);

@@ -7,8 +7,18 @@ import NoPage from "./pages/noPage";
 import LoginPage from "./pages/authentication/login";
 import OnboardingLayout from "./layout/onboardingLayout";
 import OnboardingPage from "./pages/onboarding";
+import { useDispatch, useSelector } from "react-redux";
+import { authCheckGlobal } from "./redux/slice1";
+import { useEffect } from "react";
 
 function App() {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(authCheckGlobal());
+  }, [dispatch]);
   return (
     <>
       <BrowserRouter>
@@ -29,7 +39,13 @@ function App() {
           <Route path="/audit" element={<OnboardingLayout></OnboardingLayout>}>
             <Route
               path=":qId"
-              element={<OnboardingPage></OnboardingPage>}
+              element={
+                isAuthenticated ? (
+                  <OnboardingPage></OnboardingPage>
+                ) : (
+                  <RegisterPage></RegisterPage>
+                )
+              }
             ></Route>
           </Route>
           <Route path="*" element={<NoPage></NoPage>}></Route>

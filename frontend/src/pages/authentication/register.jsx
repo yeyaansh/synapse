@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router"; // Assuming react-router-dom for navigation
+import { Link, useNavigate } from "react-router"; // Assuming react-router-dom for navigation
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,16 +28,30 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
+import axiosClient from "../../axios";
+// import { authCheckGlobal } from "../../redux/slice1";
+import { useDispatch } from "react-redux";
+import { registerGlobal } from "../../redux/slice1";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 export default function RegisterPage({ className, ...props }) {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+  }, [isAuthenticated]);
+
+  const dispatch = useDispatch();
+
   // 1. Define your Zod validation schema for the signup form
   const signupSchemaValidation = z.object({
     full_name: z.string().min(3, {
       message: "Name must be at least 3 characters.",
     }),
     gender: z.enum(["male", "female"], {
-    message: "You need to select a gender.",
-  }),
+      message: "You need to select a gender.",
+    }),
     email_id: z.email({
       message: "Please enter a valid email address.",
     }),
@@ -65,7 +79,9 @@ export default function RegisterPage({ className, ...props }) {
     // Here you would typically send data to your backend API
     // Example: await yourAuthService.register(values);
 
-       toast.success("Registered Successfully!", {
+    dispatch(registerGlobal(values));
+
+    toast.success("Registered Successfully!", {
       // message: `Welcome back!`,
     });
   }
@@ -73,7 +89,7 @@ export default function RegisterPage({ className, ...props }) {
   return (
     // Outer container for responsiveness and centering
     <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
-    <Toaster></Toaster>
+      <Toaster></Toaster>
       <div className={cn("w-full max-w-md", className)} {...props}>
         <Card className="shadow-lg">
           <CardHeader className="text-center space-y-2">
@@ -126,7 +142,6 @@ export default function RegisterPage({ className, ...props }) {
                           defaultValue={field.value}
                           className="flex space-x-4"
                         >
-
                           {/* Option 1: Male */}
                           <FormItem className="flex items-center space-x-2">
                             <FormControl>

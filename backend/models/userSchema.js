@@ -1,4 +1,4 @@
-import mongoose, { mongo, Schema } from "mongoose";
+import mongoose, {Schema } from "mongoose";
 
 // --- Sub-schema for RIASEC interests ---
 const interestsRiasecSchema = new Schema(
@@ -81,6 +81,14 @@ const userSchema = new Schema(
       minLength: 3,
       trim: true,
     },
+    gender:{
+      type:String,
+      enum:['male','female'],
+      required:true,
+      trim:true,
+      lowercase:true,
+    }
+    ,
     email_id: {
       type: String,
       unique: true,
@@ -117,7 +125,7 @@ const userSchema = new Schema(
     futureProfileData: futureProfileDataSchema,
     phone_no: {
       type: Number,
-      unique: true,
+      // unique: true,
     },
     role:{
       type:String,

@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router"; // Use react-router-dom
+import { Link, useNavigate } from "react-router"; // Use react-router-dom
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,8 +26,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Toaster } from "../../components/ui/sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { loginGlobal } from "../../redux/slice1";
+import { useEffect } from "react";
 
 export default function LoginPage({ className, ...props }) {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+  }, [isAuthenticated]);
+
+  const dispatch = useDispatch();
   // 1. Define your Zod validation schema for the login form
   const loginSchemaValidation = z.object({
     email_id: z.email({
@@ -55,6 +66,7 @@ export default function LoginPage({ className, ...props }) {
 
     // Here you would typically send data to your backend for authentication
     // Example: const user = await yourAuthService.login(values);
+    dispatch(loginGlobal(values));
 
     toast.success("Login Successful!", {
       description: `Welcome back!`,
@@ -64,7 +76,7 @@ export default function LoginPage({ className, ...props }) {
   return (
     // Outer container for responsiveness and centering
     <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
-    <Toaster></Toaster>
+      <Toaster></Toaster>
       <div className={cn("w-full max-w-md", className)} {...props}>
         <Card className="shadow-lg">
           <CardHeader className="text-center space-y-2">
