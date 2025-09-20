@@ -13,6 +13,8 @@ import { useEffect } from "react";
 import LoadingSpinner from "./utils/spinner";
 import UserDashboardLayout from "./layout/userDashboardLayout";
 import UserDashboard from "./pages/dashboard/userDashboard";
+import ProtectedRoutes from "./pages/routes/protected-routes";
+import PublicOnlyRoutes from "./pages/routes/public-routes";
 
 function App() {
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -22,79 +24,54 @@ function App() {
   useEffect(() => {
     dispatch(authCheckGlobal());
   }, [dispatch]);
-
   if (isLoading) return <LoadingSpinner />;
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={
-              isAuthenticated ? (
-                <Navigate to={"/dashboard/home"}></Navigate>
-              ) : (
-                <HomePage></HomePage>
-              )
-            }
-          ></Route>
-          <Route path="/auth" element={<AuthLayout></AuthLayout>}>
-            <Route
-              index
-              element={<Navigate to={"register"}></Navigate>}
-            ></Route>
-            <Route
-              path="register"
-              element={
-                isAuthenticated ? (
-                  <Navigate to={"/"}></Navigate>
-                ) : (
-                  <RegisterPage></RegisterPage>
-                )
-              }
-            ></Route>
-            <Route
-              path="login"
-              element={
-                isAuthenticated ? (
-                  <Navigate to={"/"}></Navigate>
-                ) : (
-                  <LoginPage></LoginPage>
-                )
-              }
-            ></Route>
+          {/* Public Routes */}
+          <Route element={<PublicOnlyRoutes></PublicOnlyRoutes>}>
+            <Route path="/" element={<HomePage></HomePage>}></Route>
+
+            <Route path="/auth" element={<AuthLayout></AuthLayout>}>
+              <Route
+                index
+                element={<Navigate to={"register"}></Navigate>}
+              ></Route>
+              <Route
+                path="register"
+                element={<RegisterPage></RegisterPage>}
+              ></Route>
+              <Route path="login" element={<LoginPage></LoginPage>}></Route>
+            </Route>
           </Route>
 
-          <Route path="/audit" element={<OnboardingLayout></OnboardingLayout>}>
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoutes />}>
             <Route
-              path=":qId"
-              element={
-                isAuthenticated ? (
-                  <OnboardingPage></OnboardingPage>
-                ) : (
-                  <RegisterPage></RegisterPage>
-                )
-              }
-            ></Route>
+              path="/audit"
+              element={<OnboardingLayout></OnboardingLayout>}
+            >
+              <Route index element={<Navigate to="start"></Navigate>}></Route>
+              <Route
+                path="start"
+                element={<OnboardingPage></OnboardingPage>}
+              ></Route>
+            </Route>
+
+            <Route
+              path="/dashboard"
+              element={<UserDashboardLayout></UserDashboardLayout>}
+            >
+              <Route index element={<Navigate to="home"></Navigate>}></Route>
+              <Route
+                path="home"
+                element={<UserDashboard></UserDashboard>}
+              ></Route>
+            </Route>
           </Route>
 
-          <Route
-            path="/dashboard"
-            element={<UserDashboardLayout></UserDashboardLayout>}
-          >
-            <Route index element={<Navigate to={"home"}></Navigate>}></Route>
-            <Route
-              path="home"
-              element={
-                isAuthenticated ? (
-                  <UserDashboard />
-                ) : (
-                  <Navigate to={"/auth/register"}></Navigate>
-                )
-              }
-            ></Route>
-          </Route>
           <Route path="*" element={<NoPage></NoPage>}></Route>
         </Routes>
       </BrowserRouter>

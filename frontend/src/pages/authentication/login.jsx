@@ -25,14 +25,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Toaster } from "../../components/ui/sonner";
+// import { Toaster } from "../../components/ui/sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { loginGlobal } from "../../redux/slice1";
 import { useEffect } from "react";
 
 export default function LoginPage({ className, ...props }) {
+
+
   // const { isAuthenticated } = useSelector((state) => state.auth);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   if (isAuthenticated) navigate("/");
@@ -62,7 +64,6 @@ export default function LoginPage({ className, ...props }) {
   // 3. Define the submit handler for login
   function onSubmit(values) {
     // This function is called only if the form data passes Zod validation.
-    console.log("Login form submitted with valid data:", values);
 
     // Here you would typically send data to your backend for authentication
     // Example: const user = await yourAuthService.login(values);

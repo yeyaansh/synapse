@@ -33,7 +33,7 @@ const registerController = async (req, res) => {
     const userData = await user.create(userRegistration);
 
     const token = jwt.sign(
-      { _id: userData._id, full_name, email_id },
+      { _id: userData._id, full_name, email_id,role:userData.role,hasCompletedAssessment: userData.hasCompletedAssessment, },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1h" }
     );
@@ -43,7 +43,10 @@ const registerController = async (req, res) => {
     const reply = {
       full_name: userData.full_name,
       email_id: userData.email_id,
-      password: userData.password,
+      role: userData.role,
+      hasCompletedAssessment: userData.hasCompletedAssessment,
+      
+      
     };
 
     res.status(200).json({
@@ -81,6 +84,8 @@ const loginController = async (req, res) => {
         _id: isEmail._id,
         full_name: isEmail.full_name,
         email_id: isEmail.email_id,
+        role:isEmail.role,
+        hasCompletedAssessment: isEmail.hasCompletedAssessment,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1h" }
@@ -92,7 +97,8 @@ const loginController = async (req, res) => {
     const reply = {
       full_name: isEmail.full_name,
       email_id: isEmail.email_id,
-      password: isEmail.password,
+      role: isEmail.role,
+      hasCompletedAssessment: isEmail.hasCompletedAssessment,
     };
     res.status(200).json({
       user: reply,

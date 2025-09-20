@@ -5,9 +5,7 @@ export const authCheckGlobal = createAsyncThunk(
   "auth/exist",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("abhi hum user ko check kar rahe hai, first time par...");
       const response = await axiosClient.get("/auth/exist");
-      console.log("ye humne receive kiya hai after checking...");
       console.log(response);
       return response.data.user;
     } catch (err) {
@@ -56,6 +54,7 @@ const authSlice = createSlice({
   initialState: {
     isAuthenticated: false,
     isLoading: false,
+    isCompletedChecks: false,
     user: null,
     error: null,
   },
@@ -68,12 +67,14 @@ const authSlice = createSlice({
       })
       .addCase(authCheckGlobal.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.isCompletedChecks = true;
         state.isAuthenticated = !!action.payload;
         state.error = null;
         state.user = action.payload;
       })
       .addCase(authCheckGlobal.rejected, (state, action) => {
         state.isAuthenticated = false;
+        state.isCompletedChecks = true;
         state.error = action.payload?.message || "user is not authenticated";
         state.isLoading = false;
         state.user = null;
@@ -84,11 +85,13 @@ const authSlice = createSlice({
       })
       .addCase(registerGlobal.fulfilled, (state, action) => {
         state.isAuthenticated = !!action.payload;
+        state.isCompletedChecks = true;
         state.isLoading = false;
         state.user = action.payload;
       })
       .addCase(registerGlobal.rejected, (state, action) => {
         state.isAuthenticated = false;
+        state.isCompletedChecks = true;
         state.isLoading = false;
         state.error = action.payload?.message || "something went wrong!";
         state.user = null;
@@ -99,12 +102,14 @@ const authSlice = createSlice({
       })
       .addCase(loginGlobal.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.isCompletedChecks = true;
         state.isAuthenticated = !!action.payload;
         state.user = action.payload;
         state.error = null;
       })
       .addCase(loginGlobal.rejected, (state, action) => {
         state.isLoading = false;
+        state.isCompletedChecks = true;
         state.isAuthenticated = false;
         state.error = action.payload?.message || "could not login!";
         state.user = null;
